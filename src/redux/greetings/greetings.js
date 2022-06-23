@@ -1,31 +1,34 @@
-import Axios from 'axios';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
-// conts
-const FETCH_GREETING = 'hello-rails-react/greetings/FETCH_GREETING';
+export const fetchMessage = createAsyncThunk(
+  'greetings/fetchMessage',
+  async () => {
+    const message = await fetch('http://localhost:3000/v1/greeting');
+    const res = await message.json();
+    return res.message;
+  },
+);
 
-// actions
-const fetchGreeting = (payload) => ({
-  type: FETCH_GREETING,
-  payload,
+export const greetingSlice = createSlice({
+  name: 'greeting',
+  initialState: {
+    message: 'This is where messages go',
+  },
+  reducers: {
+    getMessage: (state) => {
+      // eslint-disable-next-line no-param-reassign
+      state.message = 'hey';
+    },
+  },
+
+  extraReducers: (builder) => {
+    builder.addCase(fetchMessage.fulfilled, (state, action) => {
+      // eslint-disable-next-line no-param-reassign
+      state.message = action.payload;
+    });
+  },
 });
 
-// state
-const initialState = [];
+export const { getMessage } = greetingSlice.actions;
 
-export const fetchGreetingApi = () => async (dispatch) => {
-  const returnValue = await Axios.get('http://localhost:3000/v1/greetings');
-  const greeting = returnValue.data.data.greeting.message;
-  dispatch(fetchGreeting(greeting));
-};
-
-// reducer
-const reducer = (state = initialState, action) => {
-  switch (action.type) {
-    case FETCH_GREETING:
-      return action.payload;
-    default:
-      return state;
-  }
-};
-
-export default reducer;
+export default greetingSlice.reducer;
