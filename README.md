@@ -6,7 +6,7 @@
 
 ## Link to the back end
 
-[Hello Rails back end](https://github.com/chukwuemeka1234/hello-rails-back-end)
+[Hello Rails back end](https://github.com/chukwuemeka1234/hello-react-rails-backend)
 
 ## Built With
 
